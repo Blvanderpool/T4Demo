@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>T$Dashboard - AngularJS</title>
+    <link href="Content/css/t4Style.css" rel="stylesheet" />   
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.3/angular.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+    <script>
+        var app = angular.module('t4App', []);
+        //<th scope="col">Granted To</th><th scope="col">ID</th><th scope="col">Event Name</th><th scope="col">Batch Code</th><th scope="col">Location Name</th><th scope="col">Volume</th><th scope="col">Date</th><th scope="col">Supplier</th><th scope="col">Consignee</th>
+        app.controller('ticketsCtrl', function ($scope, $http) {
+            $http.get("http://t4angular.vmobileweb.com/Tickets/ListAll")
+            .then(function (response) {
+                $scope.tickets = response.data.results;
+            });
+        });
+
+        // <th scope="col">ticketsID</th><th scope="col">batch_code</th><th scope="col">batch_date</th><th scope="col">batch_volume</th><th scope="col">ticket_no</th>
+        app.controller('schedulesCtrl', function ($scope, $http) {
+            $http.get("http://t4angular.vmobileweb.com/Tickets/ListAll")
+            .then(function (response) {
+                $scope.schedules = response.data.results;
+            });
+        });
+    </script>
+
+</head>
+    <!--  class="ng-cloak"    -->
+<body ng-app="t4App">
+    <div id="t4logo" class="globalheader">        
+        <button disabled class="batchsearch" style="width: 150px;" >BATCH SEARCH</button> 
+        <span class="t4Logo" ></span>
+    </div>   
+    <form method="post" action="./Dashboard.aspx" id="form1">
+
+<div class="aspNetHidden"></div>
+    <div>     
+        
+     <div class="full">
+         <button disabled>Change Password</button> <br /><br /><br />
+     </div> 
+
+     <div class="full right">
+          <div class="left" style="width: 300px;"><h3 class="redbox" style="width:13px;display: inline;" > <span id="lblTicketsCount">10</span> </h3> <h3 class="bold_text" style="color:blue; display:inline;  ">Tickets</h3> </div>
+            <select name="ddlMonths" disabled id="ddlMonths" class="dropdown_select select right" style="width: 150px;">
+	            <option selected="selected" value="1">JANUARY</option>
+	            <option value="2">FEBUARY</option>
+	            <option value="3">MARCH</option>
+	            <option value="4">APRIL</option>
+	            <option value="5">MAY</option>
+            </select>
+        <br />
+    </div>
+      
+    <br /><br />
+        <div class="full">
+            <div style="overflow-y: scroll; height:200px;">
+	        <div  ng-controller="ticketsCtrl"> 
+	            <table  class="table table.T4GridView th" >
+                <tr>
+                    <th>ID</th>
+                    <th>Event</th>
+                    <th>Batch Code</th>
+                    <th>Location</th>
+                    <th>Volume</th>
+                    <th>Date</th>
+                    <th>Supplier</th>
+                    <th>Consignee</th>
+                </tr>
+              <tr ng-repeat="x in tickets">
+                <td>{{ x.TicketNo }}</td>
+                <td>{{ x.EventText }}</td>
+                <td>{{ x.BatchCode }}</td>
+                <td>{{ x.LocationName }}</td>
+                <td>{{ x.BatchVolume }}</td>
+                <td>{{ x.BatchDate | date}}</td>
+                <td>{{ x.SupplierName }}</td>
+                <td>{{ x.ConsigneeName }}</td>    
+              </tr>
+            </table>
+            </div>
+        </div> 
+        <br />
+    </div>
+        
+    <br /><hr />
+        
+    <div style="width: 300px;"> <h3 class="redbox" style="width:13px;display: inline;" ><span id="lblTicketCount">50</span></h3> <h3 class="bold_text" style="color:blue; display:inline;  ">Schedule</h3> </div>        
+    <br />
+    <div class="full">
+      <div style="overflow-y: scroll; height:200px;">
+	    <div  ng-controller="schedulesCtrl"> 
+	        <table  class="table table.T4GridView th" >
+            <tr>
+                <th>ID</th>
+                <th>Batch Code</th>
+                <th>Location</th>
+                <th>Volume</th>                
+                <th>Supplier</th>
+            </tr>
+          <tr ng-repeat="s in schedules">
+            <td>{{ s.TicketNo }}</td>
+            <td>{{ s.BatchCode }}</td>
+            <td>{{ s.LocationName }}</td>
+            <td>{{ s.BatchVolume }}</td>            
+            <td>{{ s.SupplierName }}</td>
+          </tr>
+        </table>
+      </div>
+    </div> 
+    <br />
+    </div>
+    <br /> <br />
+             
+    </div>
+    </form>
+    
+</body>
+</html>
